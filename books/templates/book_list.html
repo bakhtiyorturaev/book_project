@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Books</h1>
+  <ul>
+    {% for book in books %}
+      <li><a href="{% url 'books:book-detail' pk=book.pk %}">{{ book.title }}</a></li>
+    {% endfor %}
+  </ul>
+  <form method="post" action="{% url 'books:book-list' %}">
+    {% csrf_token %}
+    <!-- Add form fields as needed for creating a new book -->
+    <button type="submit">Add Book</button>
+  </form>
+{% endblock %}

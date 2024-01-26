@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ book.title }}</h1>
+  <p>Page Count: {{ book.pageCount }}</p>
+  <!-- Display other book details -->
+  <form method="post" action="{% url 'books:book-detail' pk=book.pk %}">
+    {% csrf_token %}
+    <!-- Add form fields as needed for updating the book -->
+    <button type="submit">Update Book</button>
+  </form>
+{% endblock %}

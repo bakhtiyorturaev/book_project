@@ -54,3 +54,4 @@ class BookReview(models.Model):
 
     class Meta:
         db_table = 'review_table'
+
