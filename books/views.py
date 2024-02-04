@@ -1,24 +1,24 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-
-# Create your views here.
+from django.shortcuts import render, redirect
+from django.views.generic import View, DetailView, ListView
+from .forms import AddCommentForm
+from django.contrib.auth.decorators import login_required
 from .models import Books, BookReview, BookAuthor
 
 
-class BookListView(ListView):
-    model = Books
-    template_name = 'book_list.html'
-    context_object_name = 'books'
+class BookListView(View):
+    def get(self, request):
+        create_form = Books()
+        context = {
+            'form': create_form
+        }
+        return render(request, 'book_list.html', context=context)
 
-    def get(self, request, *args, **kwargs):
-        books = self.get_queryset()
-        return render(request, self.template_name, {'books': books})
+    def post(self, request):
+        form = Books(request.POST)
+        if form.is_valid():
+            book = form.save()
 
-    def post(self, request, *args, **kwargs):
-        # Handle post request logic
-        # For example, create a new book based on the form data
-        # Redirect to the book list page or display a success message
-        return render(request, self.template_name, {'message': 'Book added successfully'})
+            return redirect(request, self.template_name, {'message': 'Book added successfully'})
 
 
 class BookDetailView(DetailView):
@@ -31,7 +31,6 @@ class BookDetailView(DetailView):
         return render(request, self.template_name, {'book': book})
 
     def post(self, request, *args, **kwargs):
-        # Handle post request logic (if needed)
         return render(request, self.template_name, {'message': 'Post request for book detail view'})
 
 
@@ -75,3 +74,16 @@ class BookReviewDetailView(DetailView):
     def post(self, request, *args, **kwargs):
         # Handle post request logic (if needed)
         return render(request, self.template_name, {'message': 'Post request for bookreview detail view'})
+
+
+@login_required(login_url='login')
+def add_comment(request):
+    if request.method == 'POST':
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            form.instance.user = request.user
+            form.save()
+            return redirect('books')
+    else:
+        form = AddCommentForm()
+    return render(request, 'add_comment.html', {'form': form})
