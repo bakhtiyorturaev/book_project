@@ -25,7 +25,8 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('books', include('books.urls')),
     path('users/', include('users.urls')),
-    path('api/', include('api.urls')),
+    path('api_book/', include('api_book.urls')),
+    path('api_user/', include('api_user.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
