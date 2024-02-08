@@ -17,7 +17,7 @@ from books.models import BookReview, BookAuthor, Books
 class BookReviewCRUD(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     serializer_class = BookReviewSerializer
-    queryset = BookReview.objects.all().order_by('-created_at')
+    queryset = BookReview.objects.all().order_by('-create_at')
     lookup_field = 'pk'
 
 
